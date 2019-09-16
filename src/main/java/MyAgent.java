@@ -41,7 +41,8 @@ public class MyAgent extends Agent {
    *
    */
   public void move() {
-
+	  if()
+	  this.moveOnColumn(randomMove());
   }
 
   /**
@@ -109,7 +110,9 @@ public class MyAgent extends Agent {
    * @return the column that would allow the agent to win.
    */
   public int iCanWin() {
-    return 0;
+    for(int i=0; i<7; i++) {
+    	
+    }
   }
 
   /**
