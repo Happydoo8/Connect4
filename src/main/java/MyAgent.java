@@ -41,7 +41,7 @@ public class MyAgent extends Agent {
    *
    */
   public void move() {
-
+	  this.moveOnColumn(1);
   }
 
   /**
