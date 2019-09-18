@@ -110,7 +110,19 @@ public class MyAgentTest {
     }
 
     // TODO: Write testTheyCanWinHorizontally
-    
+    public void testTheyCanWinHorizontally() {
+        MyAgent redAgent = new MyAgent(game, true);
+        MyAgent yellowAgent = new MyAgent(game, false);
+        game.clearBoard();
+        for (int i = 0; i < 3; i++) {
+            yellowAgent.moveOnColumn(i);
+            redAgent.moveOnColumn(i);
+        }
+
+        assertEquals(redAgent.theyCanWin(), 3);
+
+    }
+
 
     // TODO: Write testTheyCanWinDiagonally
 
