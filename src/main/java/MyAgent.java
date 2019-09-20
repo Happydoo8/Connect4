@@ -41,7 +41,7 @@ public class MyAgent extends Agent {
    *
    */
   public void move() {
-
+	  moveOnColumn(iCanWin());
   }
 
   /**
@@ -109,7 +109,28 @@ public class MyAgent extends Agent {
    * @return the column that would allow the agent to win.
    */
   public int iCanWin() {
-    return 0;
+    Connect4Game gameCopy = new Connect4Game(myGame);
+    MyAgent copyAgent = new MyAgent(gameCopy, iAmRed);
+    for(int i=0; i<7; i++) {
+      copyAgent.moveOnColumn(i);
+      if(gameCopy.gameWon() == 'R') {
+        return i;
+      }
+      
+    }
+    return -1;
+    
+    
+    // make a copy of the connect4 game
+    // type variable = new type (parameters)
+    // Ex. Connect4Game gameCopy = new Connect4Game(myGame);
+    // make an agent that is playing that copy
+    // Ex. MyAgent agentCopy = new MyAgent(gameCopy, iAmRed);
+    // have that agent move on a column
+    // check to see if you won
+      // if you won, return the column you moved at
+    // All of this should be in a for loop for every column
+    // If you never win, return -1
   }
 
   /**
