@@ -94,6 +94,28 @@ public class MyAgentTest {
         assertEquals(redAgent.iCanWin(), 3);
 
     }
+    
+    public void testICanWinDiagonally2() {
+        MyAgent redAgent = new MyAgent(game, true);
+        MyAgent yellowAgent = new MyAgent(game, false);
+        game.clearBoard();
+        for(int i=0; i<3; i++) {
+            redAgent.moveOnColumn(2*i);
+            yellowAgent.moveOnColumn(i+1);
+        }
+      
+        for(int i=0; i<1; i++) {
+            redAgent.moveOnColumn(3);
+            yellowAgent.moveOnColumn(3);
+        }
+        
+        for(int i=1; i<3; i++) {
+            redAgent.moveOnColumn(i);
+            yellowAgent.moveOnColumn(0);
+        }
+        
+        assertEquals(redAgent.iCanWin(), 3);
+    }
 
 
     @Test
