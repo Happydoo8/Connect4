@@ -41,7 +41,12 @@ public class MyAgent extends Agent {
    *
    */
   public void move() {
-	  moveOnColumn(iCanWin());
+	  if(iCanWin() != -1) {
+	    moveOnColumn(iCanWin());
+	  }
+	  else if(theyCanWin() != -1) {
+	    this.moveOnColumn(this.randomMove());
+	  }
   }
 
   /**
@@ -110,14 +115,22 @@ public class MyAgent extends Agent {
    */
   public int iCanWin() {
     Connect4Game gameCopy = new Connect4Game(myGame);
-    MyAgent copyAgent = new MyAgent(gameCopy, iAmRed);
+    MyAgent copyAgent = new MyAgent(gameCopy, true);
+    Connect4Game gameCopy2 = new Connect4Game(myGame);
+    MyAgent copyAgent2 = new MyAgent(gameCopy2, false);
     for(int i=0; i<7; i++) {
       copyAgent.moveOnColumn(i);
+      copyAgent2.moveOnColumn(i);
       if(gameCopy.gameWon() == 'R') {
         return i;
       }
       
+      else if(gameCopy2.gameWon() == 'Y') {
+        return i;
+      }
     }
+      
+    
     return -1;
     
     
@@ -143,7 +156,24 @@ public class MyAgent extends Agent {
    * @return the column that would allow the opponent to win.
    */
   public int theyCanWin() {
-    return 0;
+    Connect4Game gameCopy = new Connect4Game(myGame);
+    MyAgent copyAgent = new MyAgent(gameCopy, true);
+    Connect4Game gameCopy2 = new Connect4Game(myGame);
+    MyAgent copyAgent2 = new MyAgent(gameCopy, false);
+    for(int i=0; i<7; i++) {
+      copyAgent.moveOnColumn(i);
+      copyAgent2.moveOnColumn(i);
+      if(gameCopy.gameWon() == 'Y') {
+        return i;
+      }
+      
+      if(gameCopy2.gameWon() == 'R') {
+        return i;
+      }
+      
+    }
+    
+    return -1;
   }
 
   /**
