@@ -41,11 +41,90 @@ public class MyAgent extends Agent {
    *
    */
   public void move() {
+    Connect4Game gameCopy = new Connect4Game(myGame);
+    MyAgent redAgent = new MyAgent(gameCopy, iAmRed);
+    MyAgent yellowAgent = new MyAgent(gameCopy, !iAmRed);
 	  if(iCanWin() != -1) {
-	    moveOnColumn(iCanWin());
+	    redAgent.moveOnColumn(iCanWin());
+	    yellowAgent.moveOnColumn(iCanWin());
+	  }
+	  else if(iCanWin() == -1) {
+	    char [][] board = gameCopy.getBoardMatrix();
+	    int max = 0;
+	    int row = -1;
+	    int col = -1;
+	    for(int i=0; i<3; i++) {
+	      for(int j=0; j<4; j++) {
+	        if (board[i][j] == 'B') {
+	          continue;
+	        }
+	        int count = 1;
+	        // Vertical checking
+	        if(board[i][j] == board[i+1][j] && board[i+2][j] == 'B') {
+	          count++;
+	        }
+	        if(count > max) {
+	          max = count;
+	          row = i+2;
+	          col = j;
+	        }
+	        
+	        // Horizontal checking
+	        
+	        count = 1;
+	        if(board[i][j] == board[i][j+1]) {
+	          count++;
+	        }
+	        if(count > max) {
+	          if(i==0 || board[i-1][j+2] != 'B' && board[i][j+2] == 'B') {
+	            max = count;
+	            row = i;
+	            col = j+2;
+	          }
+	        }
+	        
+	        // Major diagonal checking
+	        
+	        count = 1;
+	        if(board[i][j] == board[i+1][j+1]) {
+	          count++;
+	        }
+	        if(count > max) {
+	          if(board[i][j+2] != 'B' && board[i+1][j+2] == 'B') {
+	            max = count;
+	            row = i+1;
+	            col = j+2;
+	          }
+	        }
+	      }
+	    }
+	    
+	    // Minor diagonal checking
+	    
+	    for(int i=0; i<3; i++) {
+	      for(int j=3; j<7; j++) {
+	        int count = 1;
+	        if(board[i][j] == board[i+1][j-1]) {
+	          count++;
+	        }
+	        if(count > max) {
+	          if(board[i+1][j-2] != 'B' && board[i+2][j-2] == 'B') {
+	            max = count;
+	            row = i+2;
+	            col = j-2;
+	          }
+	        }
+	      }
+	    }
+	    
+	    redAgent.moveOnColumn(col);
+	    yellowAgent.moveOnColumn(col);
+	    // Try to find the position to make 2 in a row to 3 in a row.
+	    // If none, then try to change 1 in a row to 2 in a row.
+	    // If none, then place randomly
 	  }
 	  else if(theyCanWin() != -1) {
-	    this.moveOnColumn(this.randomMove());
+	    moveOnColumn(randomMove());
 	  }
   }
 
@@ -115,19 +194,24 @@ public class MyAgent extends Agent {
    */
   public int iCanWin() {
     Connect4Game gameCopy = new Connect4Game(myGame);
-    MyAgent copyAgent = new MyAgent(gameCopy, true);
-    Connect4Game gameCopy2 = new Connect4Game(myGame);
-    MyAgent copyAgent2 = new MyAgent(gameCopy2, false);
+    MyAgent currentAgent = new MyAgent(gameCopy, iAmRed);
+//    Connect4Game gameCopy2 = new Connect4Game(myGame);
+//    MyAgent copyAgent2 = new MyAgent(gameCopy2, !iAmRed);
     for(int i=0; i<7; i++) {
-      copyAgent.moveOnColumn(i);
-      copyAgent2.moveOnColumn(i);
-      if(gameCopy.gameWon() == 'R') {
+      currentAgent.moveOnColumn(i);
+//      copyAgent2.moveOnColumn(i);
+      if(iAmRed && gameCopy.gameWon() == 'R') {
         return i;
+      }
+      else if (!iAmRed && gameCopy.gameWon() == 'Y') {
+        return i;
+    
       }
       
-      else if(gameCopy2.gameWon() == 'Y') {
-        return i;
-      }
+//      
+//      else if(gameCopy2.gameWon() == 'Y') {
+//        return i;
+//      }
     }
       
     
@@ -156,21 +240,25 @@ public class MyAgent extends Agent {
    * @return the column that would allow the opponent to win.
    */
   public int theyCanWin() {
+//    Connect4Game gameCopy = new Connect4Game(myGame);
+//    MyAgent copyAgent = new MyAgent(gameCopy, iAmRed);
     Connect4Game gameCopy = new Connect4Game(myGame);
-    MyAgent copyAgent = new MyAgent(gameCopy, true);
-    Connect4Game gameCopy2 = new Connect4Game(myGame);
-    MyAgent copyAgent2 = new MyAgent(gameCopy, false);
+    MyAgent opponentAgent = new MyAgent(gameCopy, !iAmRed);
     for(int i=0; i<7; i++) {
-      copyAgent.moveOnColumn(i);
-      copyAgent2.moveOnColumn(i);
-      if(gameCopy.gameWon() == 'Y') {
+//      copyAgent.moveOnColumn(i);
+      opponentAgent.moveOnColumn(i);
+      if(iAmRed && gameCopy.gameWon() == 'Y') {
+        return i;
+      } 
+      else if (!iAmRed && gameCopy.gameWon() == 'R') {
         return i;
       }
       
-      if(gameCopy2.gameWon() == 'R') {
-        return i;
-      }
       
+//      else if(gameCopy2.gameWon() == 'R') {
+//        return i;
+//      }
+
     }
     
     return -1;
