@@ -42,11 +42,8 @@ public class MyAgent extends Agent {
    */
   public void move() {
     Connect4Game gameCopy = new Connect4Game(myGame);
-    MyAgent redAgent = new MyAgent(gameCopy, iAmRed);
-    MyAgent yellowAgent = new MyAgent(gameCopy, !iAmRed);
 	  if(iCanWin() != -1) {
-	    redAgent.moveOnColumn(iCanWin());
-	    yellowAgent.moveOnColumn(iCanWin());
+	    moveOnColumn(iCanWin());
 	  }
 	  else if(iCanWin() == -1) {
 	    char [][] board = gameCopy.getBoardMatrix();
@@ -55,13 +52,16 @@ public class MyAgent extends Agent {
 	    int col = -1;
 	    for(int i=0; i<3; i++) {
 	      for(int j=0; j<4; j++) {
-	        if (board[i][j] == 'B') {
+	        /*if (board[i][j] == 'B') {
 	          continue;
-	        }
+	        }*/
 	        int count = 1;
 	        // Vertical checking
 	        if(board[i][j] == board[i+1][j] && board[i+2][j] == 'B') {
 	          count++;
+	        }
+	        else {
+	          this.moveOnColumn(this.randomMove());
 	        }
 	        if(count > max) {
 	          max = count;
@@ -74,6 +74,9 @@ public class MyAgent extends Agent {
 	        count = 1;
 	        if(board[i][j] == board[i][j+1]) {
 	          count++;
+	        }
+	        else {
+	          this.moveOnColumn(this.randomMove());
 	        }
 	        if(count > max) {
 	          if(i==0 || board[i-1][j+2] != 'B' && board[i][j+2] == 'B') {
@@ -88,6 +91,9 @@ public class MyAgent extends Agent {
 	        count = 1;
 	        if(board[i][j] == board[i+1][j+1]) {
 	          count++;
+	        }
+	        else {
+	          this.moveOnColumn(this.randomMove());
 	        }
 	        if(count > max) {
 	          if(board[i][j+2] != 'B' && board[i+1][j+2] == 'B') {
@@ -107,6 +113,9 @@ public class MyAgent extends Agent {
 	        if(board[i][j] == board[i+1][j-1]) {
 	          count++;
 	        }
+	        else {
+	          this.moveOnColumn(this.randomMove());
+	        }
 	        if(count > max) {
 	          if(board[i+1][j-2] != 'B' && board[i+2][j-2] == 'B') {
 	            max = count;
@@ -117,8 +126,7 @@ public class MyAgent extends Agent {
 	      }
 	    }
 	    
-	    redAgent.moveOnColumn(col);
-	    yellowAgent.moveOnColumn(col);
+	    moveOnColumn(col);
 	    // Try to find the position to make 2 in a row to 3 in a row.
 	    // If none, then try to change 1 in a row to 2 in a row.
 	    // If none, then place randomly
